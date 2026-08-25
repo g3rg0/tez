@@ -93,7 +93,7 @@ public class TestZkAMRegistryClient {
     zkServer.stop();
   }
 
-  public void enableZookeeperSecureClientWithJVMProperties() {
+  private void enableZookeeperSecureClientWithJVMProperties() {
     System.setProperty("zookeeper.client.secure", "true");
     System.setProperty("zookeeper.clientCnxnSocket", "org.apache.zookeeper.ClientCnxnSocketNetty");
   }
@@ -176,7 +176,7 @@ public class TestZkAMRegistryClient {
       // information registered in registry eventually reaches the registry client
       AMRecord amRecordFetched = registryClient.getRecord(appId);
       while (amRecordFetched == null) {
-        Thread.sleep(1000);
+        Thread.sleep(500);
         amRecordFetched = registryClient.getRecord(appId);
       }
       assertEquals(amRecordFetched, amRecordRegistered);

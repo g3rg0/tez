@@ -286,7 +286,7 @@ public class TestZkConfig {
   public void testZkConfigSslDisabled() {
     Configuration conf = new Configuration();
     conf.set(TezConfiguration.TEZ_AM_ZOOKEEPER_QUORUM, "dummyZkQuorum");
-    conf.set(TezConfiguration.TEZ_AM_ZOOKEEPER_SSL_ENABLE, "False");
+    conf.set(TezConfiguration.TEZ_AM_ZOOKEEPER_SSL_ENABLE, "false");
     ZkConfig zkConf = new ZkConfig(conf);
 
     assertTrue(zkConf.isSslEnabled().isPresent());
@@ -295,6 +295,22 @@ public class TestZkConfig {
     assertNull(zkConf.getZookeeperKeyStorePassword());
     assertNull(zkConf.getZookeeperTrustStoreLocation());
     assertNull(zkConf.getZookeeperTrustStorePassword());
+  }
+
+  @Test
+  public void testZkConfigAmZookeeperSslEnableCaseInsensitive() {
+    Configuration conf = new Configuration();
+    conf.set(TezConfiguration.TEZ_AM_ZOOKEEPER_QUORUM, "dummyZkQuorum");
+
+    conf.set(TezConfiguration.TEZ_AM_ZOOKEEPER_SSL_ENABLE, "False");
+    ZkConfig zkConfFalse = new ZkConfig(conf);
+    assertTrue(zkConfFalse.isSslEnabled().isPresent());
+    assertFalse(zkConfFalse.isSslEnabled().get());
+
+    conf.set(TezConfiguration.TEZ_AM_ZOOKEEPER_SSL_ENABLE, "True");
+    ZkConfig zkConfTrue = new ZkConfig(conf);
+    assertTrue(zkConfTrue.isSslEnabled().isPresent());
+    assertTrue(zkConfTrue.isSslEnabled().get());
   }
 
   @Test
